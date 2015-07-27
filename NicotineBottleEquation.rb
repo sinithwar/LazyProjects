@@ -12,9 +12,9 @@ which means I need 9mg.ml to make a 30ml bottle contain 7.5mg.ml
 6 / 2.5 = 2.4ml drops
 30ml / 10ml = 3 * 2.4ml = End Result of 7.2ml drops
 
-So what am I doing here. Well, I start by taking the strength of the nicotine and dividing
-it by the standard bottle size to get a median of how much nicotine ml I need to fill a standard
-bottle.
+So, what am I doing here? Well, I start by taking the strength of the nicotine and dividing
+it by the standard bottle size to get a median of how much nicotine mg per ml I need to fill
+a standard bottle.
 
 BaseAmountOfNicotine = Nicotine / StandardBottle
 
@@ -23,9 +23,14 @@ BAON to get the exact amount I need for the standard bottle.
 
 Nicotine Result = Desired Amount / BAON
 
-Once I find out the Nicotine result of the standard bottle, I then need to devide the size
+Once I find out the Nicotine result of the standard bottle, I then need to divide the size
 of the actual bottle by the size of the standard bottle to recieve the MultiplAmount
 I need to multipy against the nicotine result to find the actual result.
+
+// Changes - Within the actual code, if a user only has a 10ml bottle, this is a divide by 0
+scenario. So, I updated the equation to account for this. Additionally, since it is a pain
+to exactly measure the amount inside of a ML extractor, I round the number to get a more
+viable result. But I also provide them with the exact number in case they want it.
 
 MultiplAmount = Bottle / Standard Bottle
 Final Result = MultpilAmount * Nicotine Result
@@ -67,4 +72,5 @@ result = divyPerBot * desiredNic # 7.2
 roundResult = result.round
 endResult = roundResult.to_s
 
-puts("The amount of mililiter drops you will want to use is " + endResult + " inside of your " + bottle.to_s + "ml bottle.")
+puts("The amount of milliliter drops you will want to use is about " + endResult + " inside of your " + bottle.to_s + "ml bottle.")
+puts("However, if you wish to know the exact amount of drops, then it is " + result.to_s + "ml.")
