@@ -12,7 +12,7 @@ which means I need 9mg.ml to make a 30ml bottle contain 7.5mg.ml
 6 / 2.5 = 2.4ml drops
 30ml / 10ml = 3 * 2.4ml = End Result of 7.2ml drops
 
-So, what am I doing here? Well, I start by taking the strength of the nicotine and dividing
+So, what am I doing here? Well, I start by taking the strength of the nicotine and divide
 it by the standard bottle size to get a median of how much nicotine mg per ml I need to fill
 a standard bottle.
 
