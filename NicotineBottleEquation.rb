@@ -53,9 +53,18 @@ nicotine = gets.chomp.to_f
 puts("What is the Desired Strength of Nicotine that you want inside of your Bottle?")
 desiredamount = gets.chomp.to_i
 standardbottle = 10
-divyPerBot = bottle / standardbottle # 3
+#divyPerBot =
+
+if bottle == 10
+	divyPerBot = 1
+else
+	divyPerBot = bottle / standardbottle
+end
+
 baseNic = nicotine / standardbottle # 2.5
 desiredNic = desiredamount / baseNic # 2.4
 result = divyPerBot * desiredNic # 7.2
+roundResult = result.round
+endResult = roundResult.to_s
 
-puts("The amount of mililiter drops you will want to use is " + result.to_s + " inside of your " + bottle.to_s + "ml bottle.")
+puts("The amount of mililiter drops you will want to use is " + endResult + " inside of your " + bottle.to_s + "ml bottle.")
