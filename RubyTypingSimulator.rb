@@ -1,28 +1,20 @@
 require 'win32ole'
 require 'Benchmark'
 
-
-
-def typing_simulator_big(x,y)
+def file_to_array(file)
+  empty = []
+  File.foreach("#{file}") do |line|
+    empty << line.to_s.split('')
+  end
+  return empty.flatten!
+end
+def key_handler(start,stop,tests)
 	wsh = WIN32OLE.new("WScript.Shell")
-
-	def fileToArray(file)
-		empty = []
-		File.foreach("#{file}") do |line|
-			empty << line.to_s.split('')
-		end
-		return empty.flatten!
-	end
-
-	tests = fileToArray("C:\\xampp\\htdocs\\PhpDolphin\\Script\\includes\\classes.php")
-	
-	sleep 10
-	
-	while x <= y do
-		send = tests[x]
-		speed = 0.02
+	while start <= stop do
+		send = tests[start]
+		speed = 0.05
 		case send
-		when y
+		when stop
 			print "Test Complete"
 			break()
 		when "%"
@@ -64,74 +56,64 @@ def typing_simulator_big(x,y)
 		else
 			break()
 		end
-	x += 1
+	start += 1
 	end
 end
-def typing_simulator_reg(file)
+def typing_simulator_big(start,stop)
 	wsh = WIN32OLE.new("WScript.Shell")
-
-	def fileToArray(file)
-		empty = []
-		File.foreach("#{file}") do |line|
-			empty << line.to_s.split('')
-		end
-		return empty.flatten!
-	end
-
-	tests = fileToArray("#{file}")
-	puts "File will be read in 10 seconds."
+	big_file_classes = file_to_array("C:\\xampp\\htdocs\\PhpDolphin\\Script\\includes\\classes.php")
 	sleep 10
-	x = 0
-	y = tests.length
-	
-	while x <= y do
-		send = tests[x]
-		speed = 0.02
-		case send
-		when y
-			print "Test Complete"
-			break()
-		when "%"
-			wsh.SendKeys("+{5}")
-			sleep speed
-		when "("
-			wsh.SendKeys("+{9}")
-			sleep speed
-		when ")"
-			wsh.SendKeys("+{0}")
-			sleep speed
-		when "'"
-			wsh.SendKeys("{'}")
-			sleep speed
-		when '"'
-			wsh.SendKeys("+{'}")
-			sleep speed
-		when "?"
-			wsh.SendKeys("+{/}")
-			sleep speed
-		when ">"
-			wsh.SendKeys("+{.}")
-			sleep speed
-		when "<"
-			wsh.SendKeys("+{,}")
-			sleep speed
-		when ":"
-			wsh.SendKeys("+{;}")
-			sleep speed
-		when "{"
-			wsh.SendKeys("+{[}")
-			sleep speed
-		when "}"
-			wsh.SendKeys("+{]}")
-			sleep speed
-		when String
-			wsh.SendKeys("#{send}")
-			sleep speed
-		else
-			break()
-		end
-	x += 1
-	end
+	start = start
+	stop = stop
+	key_handler(start,stop,big_file_classes)
+	# while start <= stop do
+	# 	send = big_file_classes[start]
+	# 	speed = 0.02
+	# 	case send
+	# 	when stop
+	# 		print 'Program Complete'
+	# 		break()
+	# 	when "%"
+	# 		wsh.SendKeys("+{5}")
+	# 		sleep speed
+	# 	when "("
+	# 		wsh.SendKeys("+{9}")
+	# 		sleep speed
+	# 	when ")"
+	# 		wsh.SendKeys("+{0}")
+	# 		sleep speed
+	# 	when "'"
+	# 		wsh.SendKeys("{'}")
+	# 		sleep speed
+	# 	when '"'
+	# 		wsh.SendKeys("+{'}")
+	# 		sleep speed
+	# 	when "?"
+	# 		wsh.SendKeys("+{/}")
+	# 		sleep speed
+	# 	when ">"
+	# 		wsh.SendKeys("+{.}")
+	# 		sleep speed
+	# 	when "<"
+	# 		wsh.SendKeys("+{,}")
+	# 		sleep speed
+	# 	when ":"
+	# 		wsh.SendKeys("+{;}")
+	# 		sleep speed
+	# 	when "{"
+	# 		wsh.SendKeys("+{[}")
+	# 		sleep speed
+	# 	when "}"
+	# 		wsh.SendKeys("+{]}")
+	# 		sleep speed
+	# 	when String
+	# 		wsh.SendKeys("#{send}")
+	# 		sleep speed
+	# 	else
+	# 		break()
+	# 	end
+	# start += 1
+	# end
 end
 def big_file
 	puts "Which number would you like to do?"
@@ -216,6 +198,17 @@ def big_file
 	end
 	big_file()
 end
+def typing_simulator_reg(file)
+	wsh = WIN32OLE.new("WScript.Shell")
+
+	tests = file_to_array("#{file}")
+	puts "File will be read in 10 seconds."
+	sleep 10
+	start = 0
+	stop = tests.length
+	key_handler(start,stop,tests)
+end
+
 def terminal_choice
 	puts "Please choose an option"
 	puts "Big: These are for files exceding a character size of 5,000."
@@ -224,16 +217,39 @@ def terminal_choice
 	choice = gets.chomp!
 	case choice
 	when "Reg", "reg", "REG"
-		puts "Please enter a file location."
+		puts "Please enter a file location:"
 		puts "Example: C:\\random\\location"
 		file_location = gets.chomp! + "\\"
 		puts file_location
 			while file_location.is_a? String
-				puts "Please enter file name"
+				puts "Please enter file name:"
 				file = gets.chomp!
 				full_file = file_location + file
 				typing_simulator_reg(full_file)
-				exit()
+				def continue(file)
+					puts "Would you like to continue?"
+					puts "Please provide a Yes or a No:"
+					answer = gets.chomp!
+					file_location = file
+					case answer
+					when "Yes", "yes", "Y", "y"
+						puts "Please enter a file name:"
+						puts "Example: randomname.txt"
+						new_file = gets.chomp!
+						new_full_file = file_location + new_file
+						typing_simulator_reg(new_full_file)
+						continue(file_location)
+					when "No", "no", "N", "n"
+						exit()
+					else
+						puts "Invalid Response ..."
+						sleep 1
+						puts "Exiting ..."
+						sleep 1
+						exit()
+					end
+				end
+				continue(file_location)
 			end
 		exit()
 	when "Big", "big", "BIG"
