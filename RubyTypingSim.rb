@@ -8,20 +8,12 @@ def file_to_array(file)
   end
   return empty.flatten!
 end
-<<<<<<< HEAD:RubyTypingSim.rb
-big_file_classes = file_to_array("C:\\xampp\\htdocs\\PhpDolphin\\Script\\includes\\config.php")
-=======
 big_file_classes = file_to_array("C:\\xampp\\htdocs\\PhpDolphin\\Script\\includes\\classes.php")
->>>>>>> 6356ad8231b459f8df98f146499e81e873be5afe:RubyTypingSimulator.rb
 def key_handler(start,stop,tests)
 	wsh = WIN32OLE.new("WScript.Shell")
 	while start <= stop do
 		send = tests[start]
-<<<<<<< HEAD:RubyTypingSim.rb
-		speed = 0.01
-=======
-		speed = 0.1
->>>>>>> 6356ad8231b459f8df98f146499e81e873be5afe:RubyTypingSimulator.rb
+		speed = 0.075
 		case send
 		when stop
 			print "Test Complete"
@@ -165,16 +157,7 @@ def typing_simulator_reg(file)
 	tests = file_to_array("#{file}")
 	puts "File will be read in 10 seconds."
 	sleep 10
-<<<<<<< HEAD:RubyTypingSim.rb
-	if tests[0] === 'n'
-		start = 1
-	else
-		start = 0
-		print tests
-	end
-=======
 	start = 0
->>>>>>> 6356ad8231b459f8df98f146499e81e873be5afe:RubyTypingSimulator.rb
 	stop = tests.length
 	key_handler(start,stop,tests)
 end
@@ -204,22 +187,14 @@ def terminal_choice(big_file_pass)
 					answer = gets.chomp!
 					file_location = file
 					case answer
-<<<<<<< HEAD:RubyTypingSim.rb
 					when "Yes", "yes"
-=======
-					when "Yes", "yes", "Y", "y"
->>>>>>> 6356ad8231b459f8df98f146499e81e873be5afe:RubyTypingSimulator.rb
 						puts "Please enter a file name:"
 						puts "Example: randomname.txt"
 						new_file = gets.chomp!
 						new_full_file = file_location + new_file
 						typing_simulator_reg(new_full_file)
 						continue(file_location)
-<<<<<<< HEAD:RubyTypingSim.rb
 					when "No", "no"
-=======
-					when "No", "no", "N", "n"
->>>>>>> 6356ad8231b459f8df98f146499e81e873be5afe:RubyTypingSimulator.rb
 						exit()
 					else
 						puts "Invalid Response ..."
