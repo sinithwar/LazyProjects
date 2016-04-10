@@ -5,7 +5,7 @@ require 'Benchmark'
 def file_to_array(file)
   empty = []
   File.foreach("#{file}") do |line|
-    empty << line.to_s.split('')
+    empty << line.split('')
   end
   return empty.flatten!
 end
@@ -16,10 +16,10 @@ def key_handler(start,stop,tests)
 	wsh = WIN32OLE.new("WScript.Shell")
 	while start <= stop do
 		send = tests[start]
-		speed = 0.075
+		speed = 0.02
 		case send
 		when stop
-			print "Test Complete"
+			print 'Test Complete'
 			break()
 		when "%"
 			wsh.SendKeys("+{5}")
@@ -54,13 +54,11 @@ def key_handler(start,stop,tests)
 		when "}"
 			wsh.SendKeys("+{]}")
 			sleep speed
-		when String
-			wsh.SendKeys("#{send}")
-			sleep speed
 		else
-			break()
+			wsh.SendKeys(send)
+			sleep speed
 		end
-	start += 1
+	start = start + 1
 	end
 end
 def typing_simulator_big(start,stop, big_file_pass)
@@ -72,8 +70,8 @@ def typing_simulator_big(start,stop, big_file_pass)
 	key_handler(start,stop,big_file_classes)
 end
 def big_file(big_file_pass)
-	puts "Which number would you like to do?"
-	puts "Press ENTER to exit."
+	puts 'Which number would you like to do?'
+	puts 'Press ENTER to exit.'
 	decision = gets.chomp!
 	big_file_classes = big_file_pass
 	#This big case is handling the massive 180,000 character file and is not complete.
@@ -159,41 +157,43 @@ end
 def typing_simulator_reg(file)
 	wsh = WIN32OLE.new("WScript.Shell")
 	tests = file_to_array("#{file}")
-	puts "File will be read in 10 seconds."
+	puts 'File will be read in 10 seconds.'
 	sleep 10
 	start = 0
 	stop = tests.length
-	key_handler(start,stop,tests)
+	Benchmark.bm do |results|
+		results.report { key_handler(start,stop,tests) }
+	end
 end
 #This is the function that the end_user interacts with via the terminal window
 def terminal_choice(big_file_pass)
 	big_file_classes = big_file_pass
-	puts "Please choose an option"
-	puts "Big: These are for files exceding a character size of 5,000."
-	puts "Reg: The default option that will work for characters sizes less than 5,000."
-	puts "Please note that the Reg option will continue to run until the file is complete."
+	puts 'Please choose an option'
+	puts 'Big: These are for files exceding a character size of 5,000.'
+	puts 'Reg: The default option that will work for characters sizes less than 5,000.'
+	puts 'Please note that the Reg option will continue to run until the file is complete.'
 	choice = gets.chomp!
 	case choice
 	when "Reg", "reg", "REG"
-		puts "Please enter a file location:"
-		puts "Example: C:\\random\\location"
+		puts 'Please enter a file location:'
+		puts 'Example: C:\\random\\location'
 		file_location = gets.chomp! + "\\"
 		puts file_location
 			while file_location.is_a? String
-				puts "Please enter file name:"
+				puts 'Please enter file name:'
 				file = gets.chomp!
 				full_file = file_location + file
 				puts full_file
 				typing_simulator_reg(full_file)
 				def continue(file)
-					puts "Would you like to continue?"
-					puts "Please provide a Yes or a No:"
+					puts 'Would you like to continue?'
+					puts 'Please provide a Yes or a No:'
 					answer = gets.chomp!
 					file_location = file
 					case answer
 					when "Yes", "yes"
-						puts "Please enter a file name:"
-						puts "Example: randomname.txt"
+						puts 'Please enter a file name:'
+						puts 'Example: randomname.txt'
 						new_file = gets.chomp!
 						new_full_file = file_location + new_file
 						typing_simulator_reg(new_full_file)
@@ -201,9 +201,9 @@ def terminal_choice(big_file_pass)
 					when "No", "no"
 						exit()
 					else
-						puts "Invalid Response ..."
+						puts 'Invalid Response ...'
 						sleep 1
-						puts "Exiting ..."
+						puts 'Exiting ...'
 						sleep 1
 						exit()
 					end
