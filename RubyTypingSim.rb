@@ -29,6 +29,27 @@ def key_handler(start,stop,tests)
 	sleep speed
 	end
 end
+def alternative_file_handler(file)
+	wsh = WIN32OLE.new("WScript.Shell")
+	def ftoa(path)
+		File.open(path) do |f|
+			while char = f.read(1)
+				yield char
+			end
+		end
+	end
+	ftoa(file) do |char|
+		speed = 0.0025
+		check = {'%'=>'+{5}','('=>'+{9}',')'=>'+{0}','\''=>'{\'}','"'=>'+{\'}','?'=>'+{/}','>'=>'+{.}','<'=>'+{,}',':'=>'+{;}','{'=>'+{[}','}'=>'+{]}'}
+		case char
+		when '%','(',')','\'','"','?','>','<',':','{','}'
+			wsh.SendKeys(check[char])
+		else
+			wsh.SendKeys(char)
+		end
+	sleep speed
+	end
+end
 def typing_simulator_big(start,stop, big_file_pass)
 	wsh = WIN32OLE.new("WScript.Shell")
 	sleep 10
@@ -58,64 +79,6 @@ def big_file(big_file_pass)
 		typing_simulator_big(25375,32477, big_file_classes)
 	when "7"
 		typing_simulator_big(32477,36644, big_file_classes)
-	when "8"
-		exit()
-	when "9"
-		exit()
-	when "10"
-		exit()
-	when "11"
-		exit()
-	when "12"
-		exit()
-	when "13"
-		exit()
-	when "14"
-		exit()
-	when "15"
-		exit()
-	when "16"
-		exit()
-	when "17"
-		exit()
-	when "18"
-		exit()
-	when "19"
-		exit()
-	when "20"
-		exit()
-	when "21"
-		exit()
-	when "22"
-		exit()
-	when "23"
-		exit()
-	when "24"
-		exit()
-	when "25"
-		exit()
-	when "26"
-		exit()
-	when "27"
-		exit()
-	when "28"
-		exit()
-	when "29"
-		exit()
-	when "30"
-		exit()
-	when "31"
-		exit()
-	when "32"
-		exit()
-	when "33"
-		exit()
-	when "34"
-		exit()
-	when "35"
-		exit()
-	when "36"
-		exit()
 	else
 		exit()
 	end
@@ -138,6 +101,7 @@ def terminal_choice(big_file_pass)
 	puts 'Please choose an option'
 	puts 'Big: These are for files exceding a character size of 5,000.'
 	puts 'Reg: The default option that will work for characters sizes less than 5,000.'
+	puts 'Alt: The Alternative method'
 	puts 'Please note that the Reg option will continue to run until the file is complete.'
 	choice = gets.chomp!
 	case choice
@@ -178,6 +142,14 @@ def terminal_choice(big_file_pass)
 		exit()
 	when "Big", "big", "BIG"
 		big_file(big_file_classes)
+	when 'Alt','alt','ALT'
+		puts 'File:'
+		file = gets.chomp!
+		puts 'Location:'
+		file_location = gets.chomp! + "\\" + file
+		puts "Loading #{file_location} \n Please wait..."
+		sleep 10
+		alternative_file_handler(file_location)
 	else
 		puts "Invalid option ..."
 		sleep 1
