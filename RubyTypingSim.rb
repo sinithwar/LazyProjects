@@ -1,6 +1,7 @@
 require 'win32ole'
 require 'Benchmark'
 
+#This method turns the file into an array so that it can be iterated over.
 def file_to_array(file)
   empty = []
   File.foreach("#{file}") do |line|
@@ -8,7 +9,9 @@ def file_to_array(file)
   end
   return empty.flatten!
 end
+
 big_file_classes = file_to_array("C:\\xampp\\htdocs\\PhpDolphin\\Script\\includes\\classes.php")
+#This key handler handles special cases where win32ole needs direct guidance to send the correct keys.
 def key_handler(start,stop,tests)
 	wsh = WIN32OLE.new("WScript.Shell")
 	while start <= stop do
@@ -73,6 +76,7 @@ def big_file(big_file_pass)
 	puts "Press ENTER to exit."
 	decision = gets.chomp!
 	big_file_classes = big_file_pass
+	#This big case is handling the massive 180,000 character file and is not complete.
 	case decision
 	when "1"
 		typing_simulator_big(0, 5888, big_file_classes)
@@ -151,9 +155,9 @@ def big_file(big_file_pass)
 	end
 	big_file(big_file_classes)
 end
+#This method is complete and will handle regular files of 5,000 characters perfectly fine.
 def typing_simulator_reg(file)
 	wsh = WIN32OLE.new("WScript.Shell")
-
 	tests = file_to_array("#{file}")
 	puts "File will be read in 10 seconds."
 	sleep 10
@@ -161,7 +165,7 @@ def typing_simulator_reg(file)
 	stop = tests.length
 	key_handler(start,stop,tests)
 end
-
+#This is the function that the end_user interacts with via the terminal window
 def terminal_choice(big_file_pass)
 	big_file_classes = big_file_pass
 	puts "Please choose an option"
