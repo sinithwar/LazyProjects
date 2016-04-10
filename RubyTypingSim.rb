@@ -3,11 +3,9 @@ require 'Benchmark'
 
 #This method turns the file into an array so that it can be iterated over.
 def file_to_array(file)
-  empty = []
-  File.foreach("#{file}") do |line|
-    empty << line.split('')
-  end
-  return empty.flatten!
+	File.open("#{file}") do |line|
+		line.each_char.to_a
+	end
 end
 
 big_file_classes = file_to_array("C:\\xampp\\htdocs\\PhpDolphin\\Script\\includes\\classes.php")
@@ -16,49 +14,19 @@ def key_handler(start,stop,tests)
 	wsh = WIN32OLE.new("WScript.Shell")
 	while start <= stop do
 		send = tests[start]
-		speed = 0.02
+		speed = 0.0025
+		check = {'%'=>'+{5}','('=>'+{9}',')'=>'+{0}','\''=>'{\'}','"'=>'+{\'}','?'=>'+{/}','>'=>'+{.}','<'=>'+{,}',':'=>'+{;}','{'=>'+{[}','}'=>'+{]}'}
 		case send
 		when stop
 			print 'Test Complete'
 			break()
-		when "%"
-			wsh.SendKeys("+{5}")
-			sleep speed
-		when "("
-			wsh.SendKeys("+{9}")
-			sleep speed
-		when ")"
-			wsh.SendKeys("+{0}")
-			sleep speed
-		when "'"
-			wsh.SendKeys("{'}")
-			sleep speed
-		when '"'
-			wsh.SendKeys("+{'}")
-			sleep speed
-		when "?"
-			wsh.SendKeys("+{/}")
-			sleep speed
-		when ">"
-			wsh.SendKeys("+{.}")
-			sleep speed
-		when "<"
-			wsh.SendKeys("+{,}")
-			sleep speed
-		when ":"
-			wsh.SendKeys("+{;}")
-			sleep speed
-		when "{"
-			wsh.SendKeys("+{[}")
-			sleep speed
-		when "}"
-			wsh.SendKeys("+{]}")
-			sleep speed
+		when '%','(',')','\'','"','?','>','<',':','{','}'
+			wsh.SendKeys(check[send])
 		else
 			wsh.SendKeys(send)
-			sleep speed
 		end
 	start = start + 1
+	sleep speed
 	end
 end
 def typing_simulator_big(start,stop, big_file_pass)
@@ -155,7 +123,6 @@ def big_file(big_file_pass)
 end
 #This method is complete and will handle regular files of 5,000 characters perfectly fine.
 def typing_simulator_reg(file)
-	wsh = WIN32OLE.new("WScript.Shell")
 	tests = file_to_array("#{file}")
 	puts 'File will be read in 10 seconds.'
 	sleep 10
@@ -181,10 +148,9 @@ def terminal_choice(big_file_pass)
 		puts file_location
 			while file_location.is_a? String
 				puts 'Please enter file name:'
-				file = gets.chomp!
-				full_file = file_location + file
-				puts full_file
-				typing_simulator_reg(full_file)
+				file = file_location + gets.chomp!
+				puts file
+				typing_simulator_reg(file)
 				def continue(file)
 					puts 'Would you like to continue?'
 					puts 'Please provide a Yes or a No:'
@@ -194,9 +160,8 @@ def terminal_choice(big_file_pass)
 					when "Yes", "yes"
 						puts 'Please enter a file name:'
 						puts 'Example: randomname.txt'
-						new_file = gets.chomp!
-						new_full_file = file_location + new_file
-						typing_simulator_reg(new_full_file)
+						new_file = file_location + gets.chomp!
+						typing_simulator_reg(new_file)
 						continue(file_location)
 					when "No", "no"
 						exit()
