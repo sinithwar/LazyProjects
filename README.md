@@ -2,7 +2,7 @@
 This area is where I make things to make my life generally easier.
 
 ##BF2LF - Big File 2 Little File
-This is a nice little Ruby Gem that I developed to make processing and dividing mutch easier. Tested on several different files, so long as it has an extension it should work relatively quickly.
+This is a nice little Ruby Gem that I developed to make processing and dividing much easier. Tested on several different files, so long as it has an extension it should work relatively quickly.
 To use it just
 `gem install BF2LF`
 then
